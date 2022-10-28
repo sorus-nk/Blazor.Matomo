@@ -37,6 +37,7 @@ namespace Blazor.Matomo
       {
         await jsInterop.Init(ApiUrl, SiteId);
       }
+      await jsInterop.TriggerPageView(NavigationManager.Uri, await GetUserName());
     }
 
     public void Dispose()
@@ -46,9 +47,14 @@ namespace Blazor.Matomo
 
     private async void OnLocationChanged(object? sender, LocationChangedEventArgs args)
     {
+      await jsInterop.TriggerPageView(args.Location, await GetUserName());
+    }
+
+    private async Task<string?> GetUserName()
+    {
       var b = await AuthenticationStateProvider.GetAuthenticationStateAsync();
       var uid = b.User.FindFirst(ClaimTypes.NameIdentifier) ?? b.User.FindFirst(ClaimTypes.Name);
-      await jsInterop.TriggerPageView(args.Location, uid?.Subject?.Name);
+      return uid?.Subject?.Name;
     }
   }
 }
