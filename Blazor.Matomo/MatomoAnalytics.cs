@@ -41,7 +41,6 @@ namespace Blazor.Matomo
             _jsInterop = new JsInterop(JSRuntime);
             _userName = await GetUserName();
             _isDevelopment = Environment.IsDevelopment();
-            //_isDevelopment = false;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
